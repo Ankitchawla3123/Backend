@@ -1,0 +1,8 @@
+# Ignore node_modules and .env only in T1 folder
+
+*/.env
+*/node_modules/
+
+# Optional: ignore logs or system files
+*.log
+.DS_Store
