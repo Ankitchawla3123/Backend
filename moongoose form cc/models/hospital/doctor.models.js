@@ -21,8 +21,19 @@ const doctorSchema = new mongoose.Schema(
     },
     worksInHospitals: [
       {
-        type: mongoose.Schema.Types.ObjectId,
-        ref: "Hospital",
+        type: [
+          {
+            HospitalId: {
+              type: mongoose.Schema.Types.ObjectId,
+              ref: "Hospital",
+              required: true,
+            },
+            Hours: {
+              type: Number,
+              required: true,
+            },
+          },
+        ],
       },
     ],
   },
