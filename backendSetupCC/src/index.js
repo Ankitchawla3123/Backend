@@ -1,0 +1,36 @@
+// require('dotenv').config({path:"./env"})
+import dotenv from "dotenv";
+import connectDB from "./db/index.js";
+
+dotenv.config({
+  path: "./env",
+});
+
+connectDB();
+
+/*
+import mongoose from "mongoose";
+
+import { DB_NAME } from "./constants";
+import express from "express";
+
+const app = express();
+// Database can cause error when we try to connect to db so use try and catch
+// Database is always in an another continent so use async await
+//iffe immidieatly invoked functions
+(async () => {
+  await mongoose.connect(`${process.env.MONGODB_URI}/${DB_NAME}`);
+  app.on("error", (error) => {
+    console.log("Error", error);
+    throw error;
+  });
+  app.listen(process.env.PORT, () => {
+    console.log("app is listening on port ", process.env.PORT);
+  });
+  try {
+  } catch (error) {
+    console.error("ERROR: ", error);
+    throw err; // or process exit
+  }
+})();
+*/
