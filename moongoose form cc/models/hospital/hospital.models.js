@@ -10,6 +10,7 @@ const HospitalSchema = new mongoose.Schema(
       type: String,
       required: true,
     },
+
     addressLine2: {
       type: String,
     },

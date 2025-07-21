@@ -51,6 +51,7 @@ app.get("/:username/queryparam", (req, res) => {
   res.send("check the console to see if any query params ");
 });
 
+// additional chekc for self use
 app.get("{/:username}/uniquepathcheck", (req, res) => {
   res.send(
     `unique path exist with username ${
@@ -58,6 +59,8 @@ app.get("{/:username}/uniquepathcheck", (req, res) => {
     }`
   );
 });
+
+
 
 // must be at last as order matters
 app.get("/{*splat}", (req, res) => {
