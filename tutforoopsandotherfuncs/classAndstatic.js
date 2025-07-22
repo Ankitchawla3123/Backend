@@ -1,5 +1,6 @@
 class Person {
   static count = 0;
+  #newpvtvariable = 0; // private variable
   static ageinc() {
     console.log(this.age); // undefined
     this.age += 1;
