@@ -40,4 +40,5 @@ app.post("/register", (req, res) => {
 // if url encoder not used
 console.log(req.body.username); // ❌ Error: Cannot read property 'username' of undefined
 
-
+// async and try catch handler
+// promise both are okay .then or .catch
