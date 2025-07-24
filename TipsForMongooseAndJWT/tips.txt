@@ -1,0 +1,12 @@
+These are the tips for mongoose saved here, 
+Pre hook in mongoose plays an important part here. It is middleware which can be called on various event like save load etc
+Pre middleware functions are executed one after another, when each middleware calls next.
+schema.pre("save" , task (async task sometimees) ) it is a middle ware so next is also passed in this, arrow function not to be used in call back as we might need the use of this  
+
+
+methods in mongo db is also very popular i can define methods  while defining the scheme or i can define it later by calling
+schema.methods.methodName =  function --// could be an async function also mostly is 
+
+sooner we can call these methods whenever we needed for example userid and pass login time, etc etc
+ 
+

@@ -1,0 +1,88 @@
+JWT (JSON Web Token) is a secure and compact way to represent information between two parties. 
+It's commonly used for authentication and authorization in web apps and APIs.
+
+Structure :- HEADER.PAYLOAD.SIGNATURE
+
+HEADER : {
+  "alg": "HS256",  // Algorithm used to sign the token
+  "typ": "JWT"     // Type is always JWT
+}
+
+Payload (data) : {
+  "userId": "123",
+  "role": "admin",
+  "exp": 1690132123  // Expiration time (in seconds)
+}
+
+Signature : HMACSHA256(
+  base64UrlEncode(header) + "." + base64UrlEncode(payload),
+  secret
+)
+
+
+these 3 things exist together and form a JWT token whenever user logs in, we can create a jwt token for check, if credential match from seed(verified)
+then it can acess the required things
+Server verifies token
+If valid → allows access
+If invalid or expired → blocks request
+
+Signature in JWT 
+It’s a cryptographic hash generated using:
+the encoded header
+the encoded payload
+a secret key (kept safe on the server)
+
+You can't reverse the signature to get the secret.
+Without the exact secret key, you can’t generate a valid signature
+
+
+🔁 What Happens on the Server?
+When a request comes in with a JWT:
+
+Server splits it into header, payload, and signature
+Server recomputes the signature using its secret
+It compares its computed signature with the one in the token
+✅ Match → Token is valid
+❌ No match → Token is tampered or invalid
+
+RS256 ALGO 
+is an asymmetric algorithm — it uses:
+A private key to sign the token
+A public key to verify the token
+
+This is different from HS256, which uses a single shared secret for both signing and verifying (symmetric).
+
+Public key can only be used to verify the signature 
+so Basically if we use something GOOGLE Oauth, google will create signature on it's own server with it's private key and keep it to itself secure
+and it will provie us with the public key for our server use just for verification 
+
+When you log in using Google OAuth:
+Google signs the ID token using RS256
+Your backend uses Google’s public key (JWKS endpoint) to verify the token
+
+| Step | Location           | Action                                      |
+| ---- | ------------------ | ------------------------------------------- |
+| 1    | Frontend → Google  | User logs in                                |
+| 2    | Google → Frontend  | JWT (ID token) is issued, signed with RS256 |
+| 3    | Frontend → Backend | JWT is sent in Authorization header         |
+| 4    | Backend            | Fetches Google’s public key, verifies JWT   |
+| 5    | Backend            | Trusts user identity and allows access      |
+
+
+Google signs JWTs using a private key (never shared)
+You verify JWTs using the public key (fetched from Google)
+RS256 allows safe, scalable, distributed token verification
+You never have to contact Google again after getting the JWT
+Your backend can fully trust the data inside the token
+
+🔄 Key Rotation Without Downtime
+Using RS256 + JWKS allows:
+
+✅ Key rotation
+
+✅ Multiple keys (kid in header helps pick the right one)
+
+✅ Smooth transitions across environments
+
+
+

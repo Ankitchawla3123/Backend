@@ -1,4 +1,5 @@
 class ApiError extends Error {
+  // this class will be called as throw api error when we face some custom issue or error in api response and we will send the status code alongside it
   constructor(
     statusCode,
     message = "something went wrong",
