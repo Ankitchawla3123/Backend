@@ -60,6 +60,9 @@ userSchema.pre("save", async function (next) {
 // if i use pre hook directly the problem is whatever change in schema is saved it will always re run this bcrypt we don't want it to run always on every save of userschema , only want to run it on password field when update or added new pass
 
 // creating custom methods
+// custom methods are in backend notes or chatgpt
+// link :- https://chatgpt.com/share/68825563-a240-800e-998b-67f660006b58
+
 userSchema.methods.isPasswordCorrect = async function (password) {
   return await bcrypt.compare(password, this.password);
 };
