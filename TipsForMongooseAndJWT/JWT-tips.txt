@@ -77,11 +77,8 @@ Your backend can fully trust the data inside the token
 
 🔄 Key Rotation Without Downtime
 Using RS256 + JWKS allows:
-
 ✅ Key rotation
-
 ✅ Multiple keys (kid in header helps pick the right one)
-
 ✅ Smooth transitions across environments
 
 
