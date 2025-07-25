@@ -1,2 +1,9 @@
 Cloudnary is a platform that provide file upload easy, use AWS under-the-hood
 
+File system / fs 
+it has a feature called unlink what it does is unlink the file from system.
+File would be present just the link would be broken / a way to call it delete
+once successfull upload we can delete
+
+fs.unlinkSync(fileURLToPath); // in sync manner not async/ back ground must remove before move ahead
+// remove the locally saved file as the file upload failed

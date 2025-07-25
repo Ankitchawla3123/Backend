@@ -1,3 +1,14 @@
 This Note is about way to upload the files. 
 2 methods exists Multer and Express_fileupload
+These 2 help to store/keep files on server before upload on services like AWS and Multer
+once that temp file saved as local storage we upload it on cloudinary as 2nd step 
+2 steps because For security if re upload option there and other cases
 
+multer:-
+creating middle ware to captuer the images and store
+provide destination to multer where the file should be 
+could upload photos and also could upload arrays of photos
+
+we can either use memory or disk to store the file
+buffer = memory storage
+path method is for disk storage

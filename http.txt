@@ -1,0 +1,65 @@
+http has headers
+headers are used to send meta data in form of key value pairs
+in req and response available in both 
+
+many times of headers example:-
+req header from client, res headers from servers
+representation headers:- encoding and compression
+payload header:- data
+etc etc
+
+standard practices like data to be sent is consistent by different developer like ok is for 200 status but someone else send it as 400 for ok
+graphchart sends compression example
+
+common headers
+accept: application/json type of data to be recieved (found in servers) 
+user-agent : from which application sent / postman, type of browser etc info about browser( eg if browser then suggest download app etc etc)
+Authorization: Bearer --- jwt token 
+content-type: images, pdf etc
+cookies : key value pair time to be saved 
+cache control: when to expire data etc etc
+
+other header:- 
+cors headers and security header
+
+access-control-allow-origin
+access-control-allow-credentials
+access-control-allow-method (get allowed/ post allowed etc)
+
+
+security headers (skip)
+
+
+http methods 
+get: retreive
+head: only send headers no body	
+options: what operations are available on this 
+trace : loopback test (some times resource is behind proxy, but it tells about proxy) 
+delete : remove a resource
+put : replace the resource totally change
+post: add values interact 
+patch: particular part is edited 
+ 
+most common :- get post, put, delete
+
+
+status code :- 
+1xx informational
+2xx success
+3xx redirection (resource is moved somewhere) 
+4xx client error (client info sent wrong / wrong route asked for etc) 
+5xx server error (unable to process something on server) 
+
+100 continue
+102 processing
+200 ok
+201 created // succes added in db 
+202 accepted // just tell we accepted data
+307  temp redirect
+308 permanent re direct
+400 bad request
+401 un authorized // logged in but we are not allowed to use
+402 payment req
+404 not found
+500 internal server error
+504 gateway timeout
