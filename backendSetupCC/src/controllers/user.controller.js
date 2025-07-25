@@ -7,7 +7,8 @@ import { aysncHandler } from "../utils/asyncHandler.js";
 // }));
 
 const registerUser = aysncHandler(async (req, res) => {
-  res.status(200).json({
+//   console.log("recieveing req");
+  res.status(200).json({ // status is decided by us
     message: "ok",
   });
 });
