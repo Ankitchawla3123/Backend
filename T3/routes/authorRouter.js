@@ -6,10 +6,9 @@ authorRouter.get("/", (req, res) => {
   res.send("author router group");
 });
 
-authorRouter.get("/:authorid", (req, res) => {
-  const { authorid } = req.params;
-  res.send(`Author Router group with author id ${authorid}`);
+authorRouter.get("/:auid", (req, res) => {
+  const { auid } = req.params;
+  res.send(`Author Router group with author id ${auid}`);
 });
-
 
 module.exports = authorRouter;
