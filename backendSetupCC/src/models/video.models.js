@@ -51,9 +51,6 @@ videoSchema.plugin(mongooseAggregatePaginate);
 export const Video = mongoose.model("Video", videoSchema);
 
 // videoSchema.plugin(mongooseAggregatePaginate) is a plugin because:
-
 // It's meant to extend the schema/model with static pagination support.
-
 // It's designed to be reusable across many schemas.
-
 // It registers a new method (aggregatePaginate) that is not available by default in Mongoose
