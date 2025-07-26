@@ -11,7 +11,7 @@ bookRouter.get("/:bookid", (req, res) => {
   res.send(`bookid Router group with book id ${bookid}`);
 });
 
-bookRouter.get("/:bookid/reserve", (req, res) => {
+bookRouter.get("/:bookid/reserves", (req, res) => {
   const { bookid } = req.params;
   res.send(`reserver tab in book Router group with book id ${bookid}`);
 });
