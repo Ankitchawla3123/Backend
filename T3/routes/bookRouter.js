@@ -3,7 +3,7 @@ const { Router } = require("express");
 const bookRouter = Router();
 
 bookRouter.get("/", (req, res) => {
-  res.send("book router grop");
+  res.send("book router group");
 });
 
 bookRouter.get("/:bookid", (req, res) => {
