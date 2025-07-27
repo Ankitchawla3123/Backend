@@ -45,7 +45,6 @@ const registerUser = aysncHandler(async (req, res) => {
   }
 
   const avatarLocalpath = req.files?.avatar[0]?.path; // by multer
-  console.log(req.files?.coverImage);
   const coverimageLocalpath = req.files?.coverImage?.[0]?.path;
 
   if (!avatarLocalpath) {
