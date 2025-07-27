@@ -16,6 +16,20 @@ import { ApiResponse } from "../utils/ApiResponse.js";
 //   });
 // });
 
+const generateTokens = async (userId) => {
+  try {
+    const user = await User.findById(userId);
+    const accessToken = user.generateAccessToken();
+    const refreshToken = user.generateRefreshToken();
+    user.refreshToken = refreshToken;
+    await user.save({ validateBeforeSave: false }); // on save it requires all the fields back again if I dont use validateBeforeSave
+
+    return { accessToken, refreshToken };
+  } catch (error) {
+    throw new ApiError(500, "Something went wrong while generating tokens");
+  }
+};
+
 const registerUser = aysncHandler(async (req, res) => {
   // get user details(data)
   // validation - not empty
@@ -106,12 +120,65 @@ const loginUser = aysncHandler(async (req, res) => {
   if (!isPasswordValid) {
     throw new ApiError(401, "Passsword incorrect");
   }
+
+  const { accessToken, refreshToken } = await generateTokens(user._id);
+  // the tokens i recieve are from the reference to the user object of the user which was called in generateTokens not updated in user of current function updatation is not done in the user object of current function so call it again after tokens generated
+
+  const loggedinUser = await User.findById(user._id).select(
+    // select can only be used while querying not when the object is retrieved and saved
+    // query
+    "-password -refreshToken"
+  );
+
+  const options = {
+    // these options allow them to modify the cookies only by the server not by frontend (non modifiable on serverside)
+    httpOnly: true,
+    secure: true,
+  };
+
+  return res
+    .status(200)
+    .cookie("accessToken", accessToken, options)
+    .cookie("refreshToken", refreshToken, options)
+    .json(
+      new ApiResponse(
+        200,
+        {
+          user: loggedinUser,
+          // we send tokens again back because we are handling a edgecase where user himself want to set it maybe in local storage or what if the user is calling from mobile application there cookie system doesn't work
+          accessToken: accessToken,
+          refreshToken: refreshToken,
+        },
+        "User Logged in Successfully"
+      )
+    );
 });
-// const updateUser = aysncHandler(async (req, res) => {
 
-// });
+const logoutUser = aysncHandler(async (req, res) => {
+  await User.findByIdAndUpdate(
+    req.user._id,
+    {
+      $set: {
+        refreshToken: undefined,
+      },
+    },
+    {
+      new: true, // if i don't set this, i will get the old value without update.
+    }
+  );
 
-export { registerUser, loginUser };
+  const options = {
+    httpOnly: true,
+    secure: true,
+  };
+  return res
+    .status(200)
+    .clearCookie("accessToken", options)
+    .clearCookie("refreshToken", options)
+    .json(new ApiResponse(200, {}, "User loggedout"));
+});
+
+export { registerUser, loginUser, logoutUser };
 
 //Controllers encapsulate the core business logic required to process incoming requests and generate appropriate responses. This includes tasks like data validation, interacting with databases (via models), performing calculations, and preparing data for the client
 // route redirect to run a logic that logic is inside the controller

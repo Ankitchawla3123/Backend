@@ -1,6 +1,11 @@
 import { Router } from "express";
-import { registerUser } from "../controllers/user.controller.js";
+import {
+  loginUser,
+  logoutUser,
+  registerUser,
+} from "../controllers/user.controller.js";
 import { upload } from "../middlewares/multer.middleware.js";
+import { verifyJWT } from "../middlewares/auth.middlware.js";
 
 const userRouter = Router();
 
@@ -19,6 +24,11 @@ userRouter.route("/register").post(
   ]),
   registerUser
 ); //could use userrouter.get put post etc
+
+userRouter.route("/login").post(loginUser);
+
+//secured routes
+userRouter.route("/logout").post(verifyJWT, logoutUser); // my req would have user as an object with it injected by the middleware
 
 // userRouter.route("/update").put()
 
