@@ -1,12 +1,27 @@
 import { Router } from "express";
 import { registerUser } from "../controllers/user.controller.js";
+import { upload } from "../middlewares/multer.middleware.js";
 
 const userRouter = Router();
 
 // users/register
-userRouter.route("/register").post(registerUser); //could use userrouter.get put post etc
+userRouter.route("/register").post(
+  upload.fields([
+    // middleware
+    {
+      name: "avatar", // should be in front end also
+      maxCount: 1,
+    },
+    {
+      name: "coverImage",
+      maxCount: 1,
+    },
+  ]),
+  registerUser
+); //could use userrouter.get put post etc
 
-export default userRouter; // if exported as export {userRouter} then to be imported as import {userRouter}
+export default userRouter;
+// if exported as export {userRouter} then to be imported as import {userRouter}
 // if exported as default then to imported as userRouter
 
 // here asynchandler as call back is actuall logic which is performed by controller in different file

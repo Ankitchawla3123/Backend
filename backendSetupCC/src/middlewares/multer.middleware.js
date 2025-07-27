@@ -21,3 +21,5 @@ export const upload = multer({ storage: storage }); // middle ware
 // we can either use memory or disk to store the file
 // buffer = memory	storage
 // path method is for disk	storage
+
+//https://blog.logrocket.com/multer-nodejs-express-upload-file/

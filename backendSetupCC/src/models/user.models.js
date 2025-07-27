@@ -53,7 +53,7 @@ const userSchema = new Schema(
 // Pre is middleware
 userSchema.pre("save", async function (next) {
   if (!this.isModified("password")) return next();
-  this.password = bcrypt.hash(this.password, 10);
+  this.password = await bcrypt.hash(this.password, 10);
   next();
 }); // dont use arrow function here because no access for this in arrow function
 
@@ -97,5 +97,3 @@ export const User = mongoose.model("User", userSchema);
 //Processing or modifying one document
 
 // Performing checks or transformations after a document is fetched (like password checking)
-
-
