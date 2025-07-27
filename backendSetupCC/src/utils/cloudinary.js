@@ -1,7 +1,6 @@
 // reusable
 import { v2 as cloudinary } from "cloudinary";
 import fs from "fs"; // it is the file system of node js
-import { fileURLToPath } from "url";
 
 cloudinary.config({
   cloud_name: process.env.CLOUDINARY_CLOUD_NAME,
@@ -18,11 +17,12 @@ const uploadOnCloudinary = async (localFilePath) => {
       //   public_id: "shoes",
       resource_type: "auto",
     });
-    console.log("file upload succesfull");
-    console.log(response.url);
+    // console.log("file upload succesfull");
+    // console.log(response.url);
+    fs.unlinkSync(localFilePath);
     return response;
   } catch (error) {
-    fs.unlinkSync(fileURLToPath); // in sync manner not async/ back ground must remove before move ahead
+    fs.unlinkSync(localFilePath); // in sync manner not async/ back ground must remove before move ahead
     // remove the locally saved file as the file upload failed
 
     return null;
