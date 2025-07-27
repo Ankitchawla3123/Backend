@@ -35,25 +35,30 @@ const registerUser = aysncHandler(async (req, res) => {
     throw new ApiError(400, "All Fields are Required");
   }
 
-  const existedUser = User.findOne({
+  const existedUser = await User.findOne({
     // could make seperate also
     $or: [{ username }, { email }],
   }); // i can directly put username in there but we will use operator
+
   if (existedUser) {
     throw new ApiError(409, "user with email or username already exist");
   }
 
   const avatarLocalpath = req.files?.avatar[0]?.path; // by multer
-  const coverimageLocalpath = req.files?.coverIamge[0]?.path;
+  console.log(req.files?.coverImage);
+  const coverimageLocalpath = req.files?.coverImage?.[0]?.path;
 
   if (!avatarLocalpath) {
     throw new ApiError(400, "Avatar file is required");
   }
 
   const avatar = await uploadOnCloudinary(avatarLocalpath);
-  const coverimage = await uploadOnCloudinary(coverimageLocalpath);
+  let coverimage = null;
+  if (coverimageLocalpath) {
+    coverimage = await uploadOnCloudinary(coverimageLocalpath);
+  }
 
-  if (avatar) {
+  if (!avatar) {
     throw new ApiError(400, "Avatar file is required(upload failed)");
   }
 
