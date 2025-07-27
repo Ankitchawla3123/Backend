@@ -20,6 +20,8 @@ userRouter.route("/register").post(
   registerUser
 ); //could use userrouter.get put post etc
 
+// userRouter.route("/update").put()
+
 export default userRouter;
 // if exported as export {userRouter} then to be imported as import {userRouter}
 // if exported as default then to imported as userRouter

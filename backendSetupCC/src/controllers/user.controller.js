@@ -81,7 +81,37 @@ const registerUser = aysncHandler(async (req, res) => {
     .json(new ApiResponse(200, createdUser, "User Registered Successfully"));
 });
 
-export { registerUser };
+const loginUser = aysncHandler(async (req, res) => {
+  // accquire data from req.body
+  // username passs or email-pass whatever is the type
+  // find the user if user exist
+  // match the password
+  // generate access and refresh token for future
+  // send via cookies
+
+  const { email, username, password } = req.body;
+
+  if (!username || !email) {
+    throw new ApiError(400, "Username or Email is required");
+  }
+
+  const user = await User.findOne({
+    $or: [{ username }, { email }],
+  });
+
+  if (!user) {
+    throw new ApiError(404, "User does not exist, please register");
+  }
+  const isPasswordValid = await user.isPasswordCorrect(password); // we cannot use the mongoose object for using our custom methods like is password correct, generate access and refresh token so we must user(database object)
+  if (!isPasswordValid) {
+    throw new ApiError(401, "Passsword incorrect");
+  }
+});
+// const updateUser = aysncHandler(async (req, res) => {
+
+// });
+
+export { registerUser, loginUser };
 
 //Controllers encapsulate the core business logic required to process incoming requests and generate appropriate responses. This includes tasks like data validation, interacting with databases (via models), performing calculations, and preparing data for the client
 // route redirect to run a logic that logic is inside the controller
