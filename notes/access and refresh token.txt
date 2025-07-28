@@ -1,0 +1,15 @@
+what is access and refresh token 
+access token is short lived and refresh token is long lived
+
+so if my access token get expired instead of returing 401 error we can use refresh token to re generate acesstoken, if from cookies refresh token seems to be valid i can create new access token or else we will ask user to login again	
+
+
+REFRESH TOKEN REQUEST TO BE HANDLED BY FRONT END 
+ROUTE FOR THIS IS BELOW
+
+userRouter.route("/refresh-token").post(refreshAccessToken);
+// if user get a failed login/ access token expired he should hit this point if response is not success then he should login again else he would have new refresh tokens
+// to be handled in front end
+
+
+
