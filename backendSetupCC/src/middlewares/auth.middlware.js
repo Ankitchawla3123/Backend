@@ -1,6 +1,6 @@
-import { User } from "../models/user.models";
-import { ApiError } from "../utils/ApiError";
-import { aysncHandler } from "../utils/asyncHandler";
+import { User } from "../models/user.models.js";
+import { ApiError } from "../utils/ApiError.js";
+import { aysncHandler } from "../utils/asyncHandler.js";
 import jwt from "jsonwebtoken";
 
 // this is here to verify if user there or not
