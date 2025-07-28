@@ -11,8 +11,8 @@ app.use(
 ); // middleware before the request comes we can see it intercepts app.use
 // we can also configure cors
 
-app.use(express.json({ limit: "16kb" }));
-app.use(express.urlencoded({ extended: true, limit: "16kb" }));
+app.use(express.json({ limit: "16kb" })); // imp
+app.use(express.urlencoded({ extended: true, limit: "16kb" })); // imp
 app.use(express.static("public"));
 app.use(cookieParser());
 

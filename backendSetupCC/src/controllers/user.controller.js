@@ -103,9 +103,10 @@ const loginUser = aysncHandler(async (req, res) => {
   // generate access and refresh token for future
   // send via cookies
 
+  // console.log(req);
   const { email, username, password } = req.body;
 
-  if (!username || !email) {
+  if (!username && !email) {
     throw new ApiError(400, "Username or Email is required");
   }
 
