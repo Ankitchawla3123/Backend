@@ -2,6 +2,7 @@ import { Router } from "express";
 import {
   loginUser,
   logoutUser,
+  refreshAccessToken,
   registerUser,
 } from "../controllers/user.controller.js";
 import { upload } from "../middlewares/multer.middleware.js";
@@ -29,6 +30,9 @@ userRouter.route("/login").post(loginUser);
 
 //secured routes
 userRouter.route("/logout").post(verifyJWT, logoutUser); // my req would have user as an object with it injected by the middleware
+
+userRouter.route("/refresh-token").post(refreshAccessToken); // if user get a failed login/ access token expired he should hit this point if response is not success then he should login again else he would have new refresh tokens
+// to be handled in front end
 
 // userRouter.route("/update").put()
 
