@@ -4,6 +4,7 @@ import { User } from "../models/user.models.js";
 import { uploadOnCloudinary } from "../utils/cloudinary.js";
 import { ApiResponse } from "../utils/ApiResponse.js";
 import jwt from "jsonwebtoken";
+import mongoose from "mongoose";
 // use case of aysnc handler  in destructured format / raw
 // app.get('/user', asyncHandler(async (req, res) => {
 //   const user = await getUserFromDB(); // throws error
@@ -399,6 +400,64 @@ const getUserChannelProfile = aysncHandler(async (req, res) => {
   // could be multiple according to use case example the document of all users subscribed
 });
 
+const getWatchHistory = aysncHandler(async (req, res) => {
+  const user = await User.aggregate([
+    // aggregation pipeline always return an array
+    {
+      $match: {
+        _id: new mongoose.Types.ObjectId(req.user._id),
+      },
+    },
+    {
+      $lookup: {
+        from: "videos",
+        localField: "watchHistory",
+        foreignField: "_id",
+        as: "watchHistory",
+        pipeline: [
+          // sub pipelines
+          {
+            $lookup: {
+              from: "users",
+              localField: "owner",
+              foreignField: "_id",
+              as: "Owner Details",
+              pipeline: [
+                // sub pipelines
+                {
+                  $project: {
+                    fullname: 1,
+                    username: 1,
+                    avatar: 1,
+                  },
+                },
+              ],
+            },
+          },
+          // will return the array of owner of that video but it's an array with 1 value only so will extract it as field in next pipeline below now it will be a owner field in each video of watch history
+          {
+            $addFields: {
+              owner: {
+                $first: "$owner",
+              },
+            },
+          },
+        ],
+      },
+    },
+  ]);
+
+  return res
+    .status(200)
+    .json(
+      new ApiResponse(
+        200,
+        user[0].watchHistory,
+        "Watch History Fetched Successfully"
+      )
+    );
+});
+
 export {
   registerUser,
   loginUser,
@@ -409,6 +468,8 @@ export {
   updateUserAvatar,
   updateUserCoverImage,
   changeCurrentPassword,
+  getUserChannelProfile,
+  getWatchHistory,
 };
 
 //Controllers encapsulate the core business logic required to process incoming requests and generate appropriate responses. This includes tasks like data validation, interacting with databases (via models), performing calculations, and preparing data for the client
