@@ -1,0 +1,41 @@
+LEFT join opperation 
+eg:- book has title, author id, genre
+author id is linked to author document which has name and age 
+so what will be the agg pipline
+
+[
+  {// cuurently in books 
+    $lookup: {
+      from:"authors" ,
+      localField: "author_id",
+      foreignField: "_id",
+      as:"author_details"
+    }
+  },
+  {},
+  {}
+ ]
+
+lookup act as where clause to join 2 tables and give the result back of the matching author
+in return we will get an array of authordetails in which 1st element would be usefull to us so we would be needed that ahead 
+
+[
+  {// cuurently in books 
+    $lookup: {
+      from:"authors" ,
+      localField: "author_id",
+      foreignField: "_id",
+      as:"author_details"
+    }
+  },
+  // stage 2 will have the object with author details array but won't be as field but we can add it as a field in stage 2 like below
+// to access the first element of array we used $first from author_details($ used because author details is an array now part of the document from above pipeline
+  {$addFields: {
+    author_details: {
+      $first: "$author_details"
+    # $arrayElemAt : ["$author_details",0] return the 0th value(1st elem of array) same way 
+    }
+  }},
+]
+
+
