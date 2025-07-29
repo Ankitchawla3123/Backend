@@ -292,7 +292,7 @@ const updateUserAvatar = aysncHandler(async (req, res) => {
 });
 
 const updateUserCoverImage = aysncHandler(async (req, res) => {
-  const coverimageLocalpath = req.files?.path;
+  const coverimageLocalpath = req.file?.path;
   if (!coverimageLocalpath) {
     throw new ApiError(400, "Image file is missing");
   }
