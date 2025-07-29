@@ -1,9 +1,13 @@
 import { Router } from "express";
 import {
+  getCurrentUser,
   loginUser,
   logoutUser,
   refreshAccessToken,
   registerUser,
+  updateAccountDetails,
+  updateUserAvatar,
+  updateUserCoverImage,
 } from "../controllers/user.controller.js";
 import { upload } from "../middlewares/multer.middleware.js";
 import { verifyJWT } from "../middlewares/auth.middlware.js";
@@ -34,7 +38,15 @@ userRouter.route("/logout").post(verifyJWT, logoutUser); // my req would have us
 userRouter.route("/refresh-token").post(refreshAccessToken); // if user get a failed login/ access token expired he should hit this point if response is not success then he should login again else he would have new refresh tokens
 // to be handled in front end
 
-// userRouter.route("/update").put()
+userRouter.route("/current-user").get(verifyJWT, getCurrentUser);
+userRouter.route("/update-account").patch(verifyJWT, updateAccountDetails);
+
+userRouter
+  .route("/avatar")
+  .patch(verifyJWT, upload.single("avatar"), updateUserAvatar);
+userRouter
+  .route("/cover-image")
+  .patch(verifyJWT, upload.single("coverImage"), updateUserCoverImage);
 
 export default userRouter;
 // if exported as export {userRouter} then to be imported as import {userRouter}
