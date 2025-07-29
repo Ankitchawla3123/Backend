@@ -298,7 +298,7 @@ const updateUserCoverImage = aysncHandler(async (req, res) => {
   }
 
   const coverImage = await uploadOnCloudinary(coverimageLocalpath);
-  if (!avatar) {
+  if (!coverImage) {
     throw new ApiError(500, "Error uploading coverImage");
   }
 
@@ -331,7 +331,7 @@ export {
   updateAccountDetails,
   updateUserAvatar,
   updateUserCoverImage,
-  changeCurrentPassword
+  changeCurrentPassword,
 };
 
 //Controllers encapsulate the core business logic required to process incoming requests and generate appropriate responses. This includes tasks like data validation, interacting with databases (via models), performing calculations, and preparing data for the client
