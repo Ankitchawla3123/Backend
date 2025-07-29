@@ -165,7 +165,7 @@ const logoutUser = aysncHandler(async (req, res) => {
       },
     },
     {
-      new: true, // if i don't set this, i will get the old value without update.
+      new: true, // if i don't set this,then in return if store it in variable i will get the old value without update.(althought database update would occur anyway)
     }
   );
 
@@ -182,9 +182,9 @@ const logoutUser = aysncHandler(async (req, res) => {
 
 const refreshAccessToken = aysncHandler(async (req, res) => {
   const incomingRefreshToken =
-    req.cookies.refreshToken || req.body.refreshToken;
+    req.cookies?.refreshToken || req.body?.refreshToken;
   if (!incomingRefreshToken) {
-    throw new ApiError(401, "unauthorized request"); // token either expired or doesn't exist
+    throw new ApiError(401, "Unauthorized request"); // token either expired or doesn't exist
   }
   try {
     const decodedToken = jwt.verify(
@@ -200,7 +200,7 @@ const refreshAccessToken = aysncHandler(async (req, res) => {
       throw new ApiError(401, "Refresh token is expired or used");
     }
 
-    const { accessToken, newrefreshToken } = await generateTokens(user?._id);
+    const { accessToken, refreshToken } = await generateTokens(user?._id);
     const options = {
       httpOnly: true,
       secure: true,
@@ -208,11 +208,11 @@ const refreshAccessToken = aysncHandler(async (req, res) => {
     res
       .status(200)
       .cookie("accessToken", accessToken, options)
-      .cookie("refreshToken", newrefreshToken, options)
+      .cookie("refreshToken", refreshToken, options)
       .json(
         new ApiResponse(
           200,
-          { accessToken, refreshToken: newrefreshToken },
+          { accessToken, refreshToken: refreshToken },
           "access token refreshed"
         )
       );
@@ -221,7 +221,117 @@ const refreshAccessToken = aysncHandler(async (req, res) => {
   }
 });
 
-export { registerUser, loginUser, logoutUser, refreshAccessToken };
+const changeCurrentPassword = aysncHandler(async (req, res) => {
+  const { oldPassword, newPassword } = req.body;
+  const user = await User.findById(req.user?._id);
+  const isPasswordCoreect = await user.isPasswordCorrect(oldPassword);
+
+  if (!isPasswordCoreect) {
+    throw new ApiError(400, "Invalid Old Password");
+  }
+  user.password = newPassword;
+  await user.save({ validateBeforeSave: false });
+
+  return res
+    .status(200)
+    .json(new ApiResponse(200, {}, "password changed successfully"));
+});
+
+const getCurrentUser = aysncHandler(async (req, res) => {
+  return res
+    .status(200)
+    .json(new ApiResponse(200, req.user, "User fetched succesfully")); // here from middleware we will get
+});
+
+const updateAccountDetails = aysncHandler(async (req, res) => {
+  const { fullname, email } = req.body;
+
+  if (!fullname || !email) {
+    throw new ApiError(400, "All Fields are Required");
+  }
+
+  const user = await User.findByIdAndUpdate(
+    req.user?._id,
+    {
+      $set: {
+        fullname,
+        email,
+      },
+    },
+    { new: true }
+  ).select("-password");
+
+  return res
+    .status(200)
+    .json(new ApiResponse(200, user, "Account Details Updated Successfully"));
+});
+
+const updateUserAvatar = aysncHandler(async (req, res) => {
+  const avatarLocalPath = req.files?.path;
+  if (!avatarLocalPath) {
+    throw new ApiError(400, "Avatar file is missing");
+  }
+
+  const avatar = await uploadOnCloudinary(avatarLocalPath);
+  if (!avatar) {
+    throw new ApiError(500, "Error uploading avatar");
+  }
+
+  const updatedUser = await User.findByIdAndUpdate(
+    req.user?._id,
+    {
+      $set: {
+        avatar: avatar.url,
+      },
+    },
+    { new: true }
+  ).select("-password");
+  return res
+    .status(200)
+    .json(new ApiResponse(200, updatedUser, "Avatar updated successfully"));
+});
+
+const updateUserCoverImage = aysncHandler(async (req, res) => {
+  const coverimageLocalpath = req.files?.path;
+  if (!coverimageLocalpath) {
+    throw new ApiError(400, "Image file is missing");
+  }
+
+  const coverImage = await uploadOnCloudinary(coverimageLocalpath);
+  if (!avatar) {
+    throw new ApiError(500, "Error uploading coverImage");
+  }
+
+  const updatedUser = await User.findByIdAndUpdate(
+    req.user?._id,
+    {
+      $set: {
+        coverimage: coverImage.url,
+      },
+    },
+    { new: true }
+  ).select("-password");
+  return res
+    .status(200)
+    .json(
+      new ApiResponse(
+        200,
+        updatedUser,
+        "CoverImage Uploaded updated successfully"
+      )
+    );
+});
+
+export {
+  registerUser,
+  loginUser,
+  logoutUser,
+  refreshAccessToken,
+  getCurrentUser,
+  updateAccountDetails,
+  updateUserAvatar,
+  updateUserCoverImage,
+};
 
 //Controllers encapsulate the core business logic required to process incoming requests and generate appropriate responses. This includes tasks like data validation, interacting with databases (via models), performing calculations, and preparing data for the client
 // route redirect to run a logic that logic is inside the controller
