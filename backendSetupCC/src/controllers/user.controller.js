@@ -246,7 +246,7 @@ const getCurrentUser = aysncHandler(async (req, res) => {
 const updateAccountDetails = aysncHandler(async (req, res) => {
   const { fullname, email } = req.body;
 
-  if (!fullname || !email) {
+  if (!fullname && !email) {
     throw new ApiError(400, "All Fields are Required");
   }
 
@@ -267,7 +267,7 @@ const updateAccountDetails = aysncHandler(async (req, res) => {
 });
 
 const updateUserAvatar = aysncHandler(async (req, res) => {
-  const avatarLocalPath = req.files?.path;
+  const avatarLocalPath = req.file?.path;
   if (!avatarLocalPath) {
     throw new ApiError(400, "Avatar file is missing");
   }
@@ -331,6 +331,7 @@ export {
   updateAccountDetails,
   updateUserAvatar,
   updateUserCoverImage,
+  changeCurrentPassword
 };
 
 //Controllers encapsulate the core business logic required to process incoming requests and generate appropriate responses. This includes tasks like data validation, interacting with databases (via models), performing calculations, and preparing data for the client

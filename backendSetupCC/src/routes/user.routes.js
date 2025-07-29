@@ -1,5 +1,6 @@
 import { Router } from "express";
 import {
+  changeCurrentPassword,
   getCurrentUser,
   loginUser,
   logoutUser,
@@ -37,6 +38,8 @@ userRouter.route("/logout").post(verifyJWT, logoutUser); // my req would have us
 
 userRouter.route("/refresh-token").post(refreshAccessToken); // if user get a failed login/ access token expired he should hit this point if response is not success then he should login again else he would have new refresh tokens
 // to be handled in front end
+
+userRouter.route("/change-password").post(verifyJWT, changeCurrentPassword);
 
 userRouter.route("/current-user").get(verifyJWT, getCurrentUser);
 userRouter.route("/update-account").patch(verifyJWT, updateAccountDetails);
