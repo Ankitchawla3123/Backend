@@ -55,7 +55,8 @@ userSchema.pre("save", async function (next) {
   if (!this.isModified("password")) return next();
   this.password = await bcrypt.hash(this.password, 10);
   next();
-}); // dont use arrow function here because no access for this in arrow function
+});
+// dont use arrow function here because no access for this in arrow function
 
 // if i use pre hook directly the problem is whatever change in schema is saved it will always re run this bcrypt we don't want it to run always on every save of userschema , only want to run it on password field when update or added new pass
 
@@ -67,8 +68,8 @@ userSchema.methods.isPasswordCorrect = async function (password) {
   return await bcrypt.compare(password, this.password);
 };
 
-userSchema.methods.generateAccessToken = function () {
-  return jwt.sign(
+userSchema.methods.generateAccessToken = async function () {
+  return await jwt.sign(
     {
       // payload
       _id: this._id,
@@ -81,8 +82,8 @@ userSchema.methods.generateAccessToken = function () {
   );
 };
 
-userSchema.methods.generateRefreshToken = function () {
-  return jwt.sign(
+userSchema.methods.generateRefreshToken = async function () {
+  return await jwt.sign(
     {
       // payload
       _id: this._id,

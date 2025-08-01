@@ -3,8 +3,12 @@ import { ApiError } from "../utils/ApiError.js";
 import { aysncHandler } from "../utils/asyncHandler.js";
 import jwt from "jsonwebtoken";
 
+
+// if i want to pass a parameter inside verifyjwt then 
+// it would be like this verifyJWT = (para)=> aysncHandler... 
+
 // this is here to verify if user there or not
-export const verifyJWT = aysncHandler(async (req, res, next) => {
+export const verifyJWT = aysncHandler(async (req, res, next) => { 
   // only take access token
   try {
     const token =

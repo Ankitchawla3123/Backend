@@ -88,9 +88,9 @@ const registerUser = aysncHandler(async (req, res) => {
   const createdUser = await User.findById(user._id).select(
     "-password -refreshToken" // unselected ones
   );
-  if (!createdUser) {
-    throw new ApiError(500, "Something went wrong while registeration");
-  }
+    if (!createdUser) {
+      throw new ApiError(500, "Something went wrong while registeration");
+    }
 
   return res
     .status(201)
